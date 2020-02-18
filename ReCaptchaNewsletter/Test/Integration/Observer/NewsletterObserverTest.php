@@ -75,7 +75,6 @@ class NewsletterObserverTest extends AbstractController
         $this->assertRedirect($this->anything());
     }
 
-
     /**
      * @magentoDbIsolation enabled
      */
@@ -86,7 +85,6 @@ class NewsletterObserverTest extends AbstractController
         $this->assertSessionMessages($this->equalTo(['Thank you for your subscription.']));
         $this->assertRedirect($this->anything());
     }
-
 
     /**
      * @magentoDbIsolation enabled
@@ -110,7 +108,9 @@ class NewsletterObserverTest extends AbstractController
 
         $this->sendNewsletterPostAction(true, true);
 
-        $this->assertSessionMessages($this->equalTo(['You cannot proceed with such operation, your reCaptcha reputation is too low.']));
+        $this->assertSessionMessages(
+            $this->equalTo(['You cannot proceed with such operation, your reCaptcha reputation is too low.'])
+        );
         $this->assertRedirect($this->anything());
     }
 
@@ -122,9 +122,21 @@ class NewsletterObserverTest extends AbstractController
     private function sendNewsletterPostAction(bool $captchaIsEnabled = true, bool $captchaIsEnabledForNewsletter = true)
     {
         if ($captchaIsEnabled) {
-            $this->settingsConfiguration->setValue('recaptcha/frontend/enabled_for_newsletter', (int)$captchaIsEnabledForNewsletter, ScopeInterface::SCOPE_WEBSITES);
-            $this->settingsConfiguration->setValue('recaptcha/frontend/public_key', 'test_public_key', ScopeInterface::SCOPE_WEBSITES);
-            $this->settingsConfiguration->setValue('recaptcha/frontend/private_key', 'test_private_key', ScopeInterface::SCOPE_WEBSITES);
+            $this->settingsConfiguration->setValue(
+                'recaptcha/frontend/enabled_for_newsletter',
+                (int)$captchaIsEnabledForNewsletter,
+                ScopeInterface::SCOPE_WEBSITES
+            );
+            $this->settingsConfiguration->setValue(
+                'recaptcha/frontend/public_key',
+                'test_public_key',
+                ScopeInterface::SCOPE_WEBSITES
+            );
+            $this->settingsConfiguration->setValue(
+                'recaptcha/frontend/private_key',
+                'test_private_key',
+                ScopeInterface::SCOPE_WEBSITES
+            );
         }
 
         $params = [
