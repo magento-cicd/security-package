@@ -12,7 +12,6 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\ReCaptcha\Model\CaptchaValidator;
 use Magento\ReCaptchaApi\Api\CaptchaValidatorInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -46,11 +45,6 @@ class NewsletterObserverTest extends AbstractController
     private $settingsConfiguration;
 
     /**
-     * @var InterpretationStrategyInterface
-     */
-    private $interpretationStrategy;
-
-    /**
      * @inheritDoc
      */
     protected function setUp()
@@ -60,7 +54,6 @@ class NewsletterObserverTest extends AbstractController
         $this->response = $this->_objectManager->get(ResponseInterface::class);
         $this->captchaValidatorMock = $this->createMock(CaptchaValidatorInterface::class);
         $this->settingsConfiguration = $this->_objectManager->get(ReinitableConfig::class);
-        $this->interpretationStrategy = $this->_objectManager->get(InterpretationStrategyInterface::class);
         $this->_objectManager->addSharedInstance($this->captchaValidatorMock, CaptchaValidator::class);
     }
 
@@ -117,8 +110,10 @@ class NewsletterObserverTest extends AbstractController
     /**
      * Send Newsletter subscribe form
      *
+     * @param bool $captchaIsEnabled
+     * @param bool $captchaIsEnabledForNewsletter
      * @throws LocalizedException
-     **/
+     */
     private function sendNewsletterPostAction(bool $captchaIsEnabled = true, bool $captchaIsEnabledForNewsletter = true)
     {
         if ($captchaIsEnabled) {
