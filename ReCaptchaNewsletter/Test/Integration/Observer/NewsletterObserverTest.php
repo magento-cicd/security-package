@@ -108,6 +108,24 @@ class NewsletterObserverTest extends AbstractController
     }
 
     /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @throws LocalizedException
+     */
+    public function testErrorValidatingRecaptcha()
+    {
+        $exception = new LocalizedException(__('error_message'));
+
+        $this->captchaValidatorMock
+            ->expects($this->once())->method('validate')->willThrowException($exception);
+
+        $this->expectException(LocalizedException::class);
+        $this->expectExceptionMessage($exception->getMessage());
+
+        $this->sendNewsletterPostAction(true, true);
+    }
+
+    /**
      * Send Newsletter subscribe form
      *
      * @param bool $captchaIsEnabled
