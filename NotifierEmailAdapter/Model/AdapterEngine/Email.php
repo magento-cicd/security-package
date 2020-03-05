@@ -59,14 +59,6 @@ class Email implements AdapterEngineInterface
         $this->transportFactory = $transportFactory;
     }
 
-    /**
-     * Execute engine and return true on success. Throw exception on failure.
-     * @param string $message
-     * @param array $configParams
-     * @param array $params
-     * @return bool
-     * @throws MailException
-     */
     public function execute(string $message, array $configParams = [], array $params = []): bool
     {
         $lines = explode("\n", $message);
